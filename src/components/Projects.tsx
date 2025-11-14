@@ -12,6 +12,7 @@ const projects = [
     title: "eCOM SITE",
     description: "3D interactive email service for developers with stunning visuals",
     tech: ["React", "Spline", "GSAP"],
+    link: "https://github.com/rounakchakraborty834-droid/woo-commerce-site",
   },
   {
     id: 2,
@@ -154,6 +155,8 @@ const Projects = () => {
                 <Button
                   variant="outline"
                   className="w-full border-primary/30 hover:bg-primary hover:text-primary-foreground group-hover:glow-box transition-all duration-300"
+                  onClick={() => project.link && window.open(project.link, '_blank')}
+                  disabled={!project.link}
                 >
                   View Project
                 </Button>
