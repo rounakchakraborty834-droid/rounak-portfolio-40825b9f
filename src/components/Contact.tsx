@@ -156,7 +156,7 @@ const Contact = () => {
             </p>
             <div className="flex justify-center gap-6">
               <a
-                href="https://github.com"
+                href="https://github.com/rounakchakraborty834-droid"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary hover:scale-110 hover:glow-box transition-all duration-300 group"
@@ -164,7 +164,7 @@ const Contact = () => {
                 <Github className="w-6 h-6 text-primary group-hover:text-primary-foreground" />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/rounak-chakraborty-b55378369"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary hover:scale-110 hover:glow-box transition-all duration-300 group"
@@ -172,7 +172,7 @@ const Contact = () => {
                 <Linkedin className="w-6 h-6 text-primary group-hover:text-primary-foreground" />
               </a>
               <a
-                href="mailto:contact@example.com"
+                href="mailto:rounakchakraborty834@gmail.com"
                 className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary hover:scale-110 hover:glow-box transition-all duration-300 group"
               >
                 <Mail className="w-6 h-6 text-primary group-hover:text-primary-foreground" />
