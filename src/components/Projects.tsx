@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 const projects = [
   {
     id: 1,
-    title: "Email Platform",
+    title: "eCOM SITE",
     description: "3D interactive email service for developers with stunning visuals",
     tech: ["React", "Spline", "GSAP"],
   },
