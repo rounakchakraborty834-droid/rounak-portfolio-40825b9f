@@ -83,8 +83,8 @@ const Hero = () => {
         </div>
 
         {/* Right: Spline 3D */}
-        <div ref={splineRef} className="relative h-[500px] lg:h-[600px]">
-          <iframe src="https://my.spline.design/orb-m5KSbPJiTDXdujpgjzBsnq9S/" className="w-full h-full border-0 rounded-2xl" title="3D Orb Animation" />
+        <div ref={splineRef} className="relative h-[600px] lg:h-[85vh]">
+          <iframe src="https://my.spline.design/orb-m5KSbPJiTDXdujpgjzBsnq9S/" className="w-full h-full border-0 rounded-3xl" title="3D Orb Animation" />
         </div>
       </div>
     </section>;
