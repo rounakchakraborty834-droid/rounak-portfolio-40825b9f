@@ -19,6 +19,7 @@ const projects = [
     title: "Gaming UI",
     description: "Next-level gaming interface with character stats and arena",
     tech: ["React", "Three.js", "TypeScript"],
+    link: "https://supermariomodi.com/",
   },
   {
     id: 3,
