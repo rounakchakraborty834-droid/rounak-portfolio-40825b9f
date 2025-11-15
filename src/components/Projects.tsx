@@ -35,9 +35,10 @@ const projects = [
   },
   {
     id: 5,
-    title: "Animation Tools",
-    description: "Portfolio showcasing advanced web animation techniques",
-    tech: ["GSAP", "Locomotive", "React"],
+    title: "AstaTask",
+    description: "Modern to-do list application with task management features",
+    tech: ["HTML", "CSS", "JavaScript"],
+    link: "https://rounakchakraborty834-droid.github.io/AstraTask-To-do-List/",
   },
   {
     id: 6,
