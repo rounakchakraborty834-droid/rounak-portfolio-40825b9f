@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/components/ui/button";
-import { Code2 } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,48 +10,54 @@ const projects = [
   {
     id: 1,
     title: "eCOM SITE",
-    description: "3D interactive email service for developers with stunning visuals",
+    description: "Modern e-commerce platform with advanced 3D product visualization and seamless checkout experience",
     tech: ["React", "Spline", "GSAP"],
     link: "https://github.com/rounakchakraborty834-droid/woo-commerce-site",
+    category: "E-Commerce"
   },
   {
     id: 2,
     title: "Gaming UI",
-    description: "Next-level gaming interface with character stats and arena",
+    description: "Next-generation gaming interface featuring character stats, leaderboards, and immersive arena views",
     tech: ["React", "Three.js", "TypeScript"],
     link: "https://supermariomodi.com/",
+    category: "Gaming"
   },
   {
     id: 3,
     title: "3D Portfolio",
-    description: "Immersive portfolio with 3D elements and smooth animations",
+    description: "Interactive portfolio showcase with stunning 3D elements and smooth scroll animations",
     tech: ["HTML", "CSS", "JavaScript"],
+    category: "Portfolio"
   },
   {
     id: 4,
     title: "Gaming Website",
-    description: "Vibrant gaming platform with dynamic character showcase",
+    description: "Dynamic gaming platform with vibrant character showcases and engaging user interactions",
     tech: ["React", "GSAP", "Tailwind"],
+    category: "Gaming"
   },
   {
     id: 5,
     title: "AstaTask",
-    description: "Modern to-do list application with task management features",
+    description: "Modern task management application with intuitive interface and productivity features",
     tech: ["HTML", "CSS", "JavaScript"],
     link: "https://rounakchakraborty834-droid.github.io/AstraTask-To-do-List/",
+    category: "Productivity"
   },
   {
     id: 6,
     title: "Developer Portfolio",
-    description: "Professional portfolio with smooth scroll and animations",
+    description: "Professional portfolio website featuring smooth scroll interactions and modern design patterns",
     tech: ["React", "GSAP", "CSS"],
+    category: "Portfolio"
   },
 ];
 
 const Projects = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const projectsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -59,12 +65,12 @@ const Projects = () => {
         titleRef.current,
         {
           opacity: 0,
-          y: 50,
+          y: 30,
         },
         {
           opacity: 1,
           y: 0,
-          duration: 1,
+          duration: 0.8,
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top 70%",
@@ -72,23 +78,21 @@ const Projects = () => {
         }
       );
 
-      const cards = scrollContainerRef.current?.children;
+      const cards = projectsRef.current?.children;
       if (cards) {
         gsap.fromTo(
           cards,
           {
             opacity: 0,
-            y: 80,
-            scale: 0.9,
+            y: 50,
           },
           {
             opacity: 1,
             y: 0,
-            scale: 1,
-            duration: 0.8,
-            stagger: 0.15,
+            duration: 0.6,
+            stagger: 0.1,
             scrollTrigger: {
-              trigger: scrollContainerRef.current,
+              trigger: projectsRef.current,
               start: "top 80%",
             },
           }
@@ -105,78 +109,88 @@ const Projects = () => {
       id="projects"
       className="py-24 px-6 relative overflow-hidden"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
-
       <div className="container mx-auto relative z-10">
-        <h2
-          ref={titleRef}
-          className="text-5xl md:text-6xl font-bold text-center mb-16 glow-text"
-        >
-          Featured <span className="text-primary">Projects</span>
-        </h2>
+        <div ref={titleRef} className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            Featured <span className="text-gradient">Projects</span>
+          </h2>
+          <div className="w-20 h-1 accent-gradient rounded-full mx-auto mb-4" />
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            A selection of my recent work showcasing expertise in modern web development
+          </p>
+        </div>
 
-        {/* Horizontal Scroll Container */}
-        <div className="overflow-x-auto pb-8 hide-scrollbar">
-          <div
-            ref={scrollContainerRef}
-            className="flex gap-6 md:gap-8 min-w-max px-4"
-          >
-            {projects.map((project) => (
-              <div
-                key={project.id}
-                className="glass-card p-8 rounded-2xl w-[350px] md:w-[400px] hover:glow-box hover:scale-105 transition-all duration-500 group"
-              >
-                {/* Project Number Badge */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-2xl font-bold glow-box">
-                    {project.id}
-                  </div>
-                  <Code2 className="w-8 h-8 text-primary group-hover:rotate-12 transition-transform duration-300" />
+        <div
+          ref={projectsRef}
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {projects.map((project) => (
+            <div
+              key={project.id}
+              className="professional-card p-6 rounded-xl group"
+            >
+              <div className="space-y-4">
+                {/* Category Badge */}
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold px-3 py-1 bg-primary/10 text-primary rounded-full">
+                    {project.category}
+                  </span>
+                  <span className="text-3xl font-bold text-muted-foreground/20">
+                    {String(project.id).padStart(2, '0')}
+                  </span>
                 </div>
 
-                <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors duration-300">
+                {/* Project Title */}
+                <h3 className="text-2xl font-bold group-hover:text-primary transition-colors">
                   {project.title}
                 </h3>
 
-                <p className="text-muted-foreground mb-6 leading-relaxed">
+                {/* Description */}
+                <p className="text-muted-foreground leading-relaxed min-h-[60px]">
                   {project.description}
                 </p>
 
                 {/* Tech Stack */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.tech.map((tech) => (
+                <div className="flex flex-wrap gap-2">
+                  {project.tech.map((tech, idx) => (
                     <span
-                      key={tech}
-                      className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm border border-primary/20"
+                      key={idx}
+                      className="text-xs px-3 py-1 bg-muted rounded-full text-foreground/70"
                     >
                       {tech}
                     </span>
                   ))}
                 </div>
 
-                <Button
-                  variant="outline"
-                  className="w-full border-primary/30 hover:bg-primary hover:text-primary-foreground group-hover:glow-box transition-all duration-300"
-                  onClick={() => project.link && window.open(project.link, '_blank')}
-                  disabled={!project.link}
-                >
-                  View Project
-                </Button>
+                {/* Action Buttons */}
+                <div className="flex gap-3 pt-2">
+                  {project.link && (
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className="flex-1 accent-gradient hover:opacity-90"
+                      onClick={() => window.open(project.link, "_blank")}
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      View Project
+                    </Button>
+                  )}
+                  {!project.link && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1"
+                      disabled
+                    >
+                      Coming Soon
+                    </Button>
+                  )}
+                </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
-
-      <style>{`
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .hide-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
     </section>
   );
 };

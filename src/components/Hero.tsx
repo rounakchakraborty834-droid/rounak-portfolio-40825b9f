@@ -1,92 +1,118 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const splineRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const tl = gsap.timeline({
-      delay: 0.5
+      delay: 0.3
     });
+
     tl.fromTo(headlineRef.current, {
-      opacity: 0,
-      y: 60,
-      filter: "blur(10px)"
-    }, {
-      opacity: 1,
-      y: 0,
-      filter: "blur(0px)",
-      duration: 1.2,
-      ease: "power3.out"
-    }).fromTo(subtitleRef.current, {
       opacity: 0,
       y: 40
     }, {
       opacity: 1,
       y: 0,
       duration: 0.8,
-      ease: "power2.out"
-    }, "-=0.6").fromTo(ctaRef.current, {
+      ease: "power3.out"
+    }).fromTo(subtitleRef.current, {
       opacity: 0,
-      scale: 0.8
+      y: 20
+    }, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: "power2.out"
+    }, "-=0.4").fromTo(ctaRef.current, {
+      opacity: 0,
+      y: 20
+    }, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: "power2.out"
+    }, "-=0.3").fromTo(splineRef.current, {
+      opacity: 0,
+      scale: 0.95
     }, {
       opacity: 1,
       scale: 1,
-      duration: 0.6,
-      ease: "back.out(1.7)"
-    }, "-=0.4").fromTo(splineRef.current, {
-      opacity: 0,
-      x: 100
-    }, {
-      opacity: 1,
-      x: 0,
-      duration: 1.2,
+      duration: 1,
       ease: "power2.out"
-    }, "-=1");
+    }, "-=0.8");
   }, []);
-  return <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg">
-      {/* Floating background orbs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-20 right-20 w-80 h-80 bg-secondary/10 rounded-full blur-3xl animate-float" style={{
-        animationDelay: "2s"
-      }} />
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-glow-pulse" />
-      </div>
 
-      <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
+  const scrollToContact = () => {
+    const contactSection = document.getElementById("contact");
+    contactSection?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-background via-background to-muted/30">
+      <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10 py-20">
         {/* Left: Text Content */}
-        <div className="space-y-8 text-center lg:text-left">
-          <h1 ref={headlineRef} className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight">
+        <div className="space-y-6 text-center lg:text-left">
+          <div className="inline-block px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-sm font-medium text-primary mb-4">
+            Available for Freelance
+          </div>
+          
+          <h1 ref={headlineRef} className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
             Hi, I'm{" "}
-            <span className="glow-text bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Rounak</span>
-            <br />
-            <span className="text-foreground/80 text-4xl md:text-5xl lg:text-6xl">
-              Web Developer
-            </span>
+            <span className="text-gradient">Rounak</span>
           </h1>
-
-          <p ref={subtitleRef} className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto lg:mx-0">
-            Crafting digital experiences that inspire and engage through
-            innovative design and cutting-edge technology.
+          
+          <p className="text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground/70">
+            Web Developer
           </p>
 
-          <div ref={ctaRef}>
-            <Button size="lg" className="group relative overflow-hidden bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:scale-105 transition-transform duration-300 glow-box px-8 py-6 text-lg">
-              <span className="relative z-10">Hire Me</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-secondary to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <p ref={subtitleRef} className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+            Crafting exceptional digital experiences through innovative design and cutting-edge technology. 
+            Specialized in modern web development with a focus on performance and user experience.
+          </p>
+
+          <div ref={ctaRef} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+            <Button 
+              size="lg" 
+              onClick={scrollToContact}
+              className="group relative overflow-hidden accent-gradient hover:opacity-90 transition-opacity px-8 py-6 text-lg shadow-lg"
+            >
+              <span className="relative z-10 flex items-center gap-2">
+                Get In Touch
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </Button>
+            
+            <Button 
+              size="lg" 
+              variant="outline"
+              onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
+              className="border-2 px-8 py-6 text-lg hover:bg-primary/5"
+            >
+              View Projects
             </Button>
           </div>
         </div>
 
         {/* Right: Spline 3D */}
-        <div ref={splineRef} className="relative h-[700px] lg:h-screen lg:-mr-12">
-          <iframe src="https://my.spline.design/genkubgreetingrobot-Wgc99sBpfyGgYHCt6AWyhysh/" frameBorder="0" className="w-full h-full border-0 rounded-3xl" title="3D Robot Animation" />
+        <div ref={splineRef} className="relative h-[500px] lg:h-[700px] rounded-2xl overflow-hidden shadow-xl">
+          <iframe 
+            src="https://my.spline.design/genkubgreetingrobot-Wgc99sBpfyGgYHCt6AWyhysh/" 
+            frameBorder="0" 
+            className="w-full h-full border-0" 
+            title="3D Robot Animation" 
+          />
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default Hero;
