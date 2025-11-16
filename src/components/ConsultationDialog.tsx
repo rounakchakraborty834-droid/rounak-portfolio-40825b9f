@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 const consultationSchema = z.object({
   name: z.string().trim().min(2, { message: "Name must be at least 2 characters" }).max(100),
@@ -74,24 +75,39 @@ export const ConsultationDialog = ({ open, onOpenChange }: ConsultationDialogPro
     }
   };
 
-  const onSubmit = (data: ConsultationFormData) => {
-    const consultationData = {
-      ...data,
-      consultationDate: selectedDate ? format(selectedDate, "PPP") : "",
-    };
+  const onSubmit = async (data: ConsultationFormData) => {
+    try {
+      const { error } = await supabase.from('consultations').insert([{
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        consultation_date: selectedDate!.toISOString().split('T')[0],
+        web_idea: data.projectIdea,
+        budget: data.budget,
+        delivery_time: data.deliveryTime,
+        project_type: data.projectType,
+      }]);
 
-    console.log("Consultation booking:", consultationData);
+      if (error) throw error;
 
-    toast({
-      title: "Consultation Scheduled! 🎉",
-      description: `We'll contact you on ${format(selectedDate!, "PPP")} to discuss your ${data.projectType} project.`,
-    });
+      toast({
+        title: "Consultation Scheduled! 🎉",
+        description: `We'll contact you on ${format(selectedDate!, "PPP")} to discuss your ${data.projectType} project.`,
+      });
 
-    // Reset form and close dialog
-    form.reset();
-    setSelectedDate(undefined);
-    setShowForm(false);
-    onOpenChange(false);
+      // Reset form and close dialog
+      form.reset();
+      setSelectedDate(undefined);
+      setShowForm(false);
+      onOpenChange(false);
+    } catch (error) {
+      console.error('Error saving consultation:', error);
+      toast({
+        title: "Error",
+        description: "Failed to schedule consultation. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleClose = () => {
