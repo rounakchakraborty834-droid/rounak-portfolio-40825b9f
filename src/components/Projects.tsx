@@ -25,10 +25,11 @@ const projects = [
   },
   {
     id: 3,
-    title: "3D Portfolio",
-    description: "Interactive portfolio showcase with stunning 3D elements and smooth scroll animations",
-    tech: ["HTML", "CSS", "JavaScript"],
-    category: "Portfolio"
+    title: "PixelSYNC Weather App",
+    description: "Real-time weather application with dynamic backgrounds, detailed forecasts, and location-based weather data",
+    tech: ["JavaScript", "Weather API", "CSS"],
+    link: "https://rounakchakraborty834-droid.github.io/PixelSync-Weather/",
+    category: "Web App"
   },
   {
     id: 4,
