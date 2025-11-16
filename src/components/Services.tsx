@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Rocket, Sparkles, Globe, Shield, Zap, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ConsultationDialog } from "./ConsultationDialog";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,6 +57,7 @@ const Services = () => {
   const titleRef = useRef<HTMLDivElement>(null);
   const servicesGridRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const [consultationOpen, setConsultationOpen] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -204,7 +206,7 @@ const Services = () => {
               size="lg"
               variant="outline"
               className="text-base px-8 hover:bg-primary/10 hover:text-primary hover:border-primary transition-all"
-              onClick={scrollToContact}
+              onClick={() => setConsultationOpen(true)}
             >
               Schedule a Consultation
             </Button>
@@ -231,6 +233,8 @@ const Services = () => {
           </div>
         </div>
       </div>
+
+      <ConsultationDialog open={consultationOpen} onOpenChange={setConsultationOpen} />
     </section>
   );
 };
