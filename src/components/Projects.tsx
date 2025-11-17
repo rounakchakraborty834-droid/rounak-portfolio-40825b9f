@@ -48,10 +48,11 @@ const projects = [
   },
   {
     id: 6,
-    title: "Developer Portfolio",
-    description: "Professional portfolio website featuring smooth scroll interactions and modern design patterns",
+    title: "PantryPlus",
+    description: "Recipe finder application that helps you discover delicious recipes based on available ingredients",
     tech: ["React", "GSAP", "CSS"],
-    category: "Portfolio"
+    link: "https://rounakchakraborty834-droid.github.io/PantryPlus/",
+    category: "Web App"
   },
 ];
 
