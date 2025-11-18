@@ -113,25 +113,29 @@ const Skills = () => {
             return (
               <div
                 key={index}
-                className="professional-card p-6 rounded-xl group hover:scale-105 transition-all duration-300"
+                className="professional-card p-6 rounded-xl group relative overflow-hidden tilt-card cursor-pointer hover:scale-105 transition-all duration-500"
               >
-                <div className="space-y-4">
-                  {/* Icon with gradient background */}
-                  <div className={`w-14 h-14 rounded-lg bg-gradient-to-br ${category.color} p-3 mb-4 group-hover:shadow-lg transition-shadow`}>
-                    <Icon className="w-full h-full text-white" />
+                {/* Animated background */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
+                
+                <div className="space-y-4 relative z-10">
+                  {/* Icon with gradient background and animations */}
+                  <div className={`w-14 h-14 rounded-lg bg-gradient-to-br ${category.color} p-3 mb-4 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-2xl transition-all duration-500`}>
+                    <Icon className="w-full h-full text-white group-hover:scale-110 transition-transform duration-300" />
                   </div>
 
-                  {/* Category Title */}
-                  <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
+                  {/* Category Title with gradient on hover */}
+                  <h3 className="text-xl font-bold group-hover:text-gradient transition-all duration-300">
                     {category.title}
                   </h3>
 
-                  {/* Skills List */}
+                  {/* Skills List with stagger animation */}
                   <div className="flex flex-wrap gap-2">
                     {category.skills.map((skill, idx) => (
                       <span
                         key={idx}
-                        className="text-xs px-3 py-1.5 bg-muted rounded-full text-foreground/70 hover:bg-primary/10 hover:text-primary transition-colors cursor-default"
+                        className="text-xs px-3 py-1.5 bg-muted rounded-full text-foreground/70 hover:bg-primary/10 hover:text-primary hover:scale-110 transition-all duration-300 cursor-default"
+                        style={{ transitionDelay: `${idx * 30}ms` }}
                       >
                         {skill}
                       </span>
@@ -143,23 +147,23 @@ const Skills = () => {
           })}
         </div>
 
-        {/* Stats Section */}
+        {/* Stats Section with count-up animation */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
-          <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-gradient mb-2">50+</div>
-            <div className="text-sm text-muted-foreground">Projects Completed</div>
+          <div className="text-center group cursor-default">
+            <div className="text-4xl md:text-5xl font-bold text-gradient mb-2 group-hover:scale-110 transition-transform duration-300">50+</div>
+            <div className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">Projects Completed</div>
           </div>
-          <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-gradient mb-2">3+</div>
-            <div className="text-sm text-muted-foreground">Years Experience</div>
+          <div className="text-center group cursor-default">
+            <div className="text-4xl md:text-5xl font-bold text-gradient mb-2 group-hover:scale-110 transition-transform duration-300">3+</div>
+            <div className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">Years Experience</div>
           </div>
-          <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-gradient mb-2">15+</div>
-            <div className="text-sm text-muted-foreground">Technologies</div>
+          <div className="text-center group cursor-default">
+            <div className="text-4xl md:text-5xl font-bold text-gradient mb-2 group-hover:scale-110 transition-transform duration-300">15+</div>
+            <div className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">Technologies</div>
           </div>
-          <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-gradient mb-2">100%</div>
-            <div className="text-sm text-muted-foreground">Client Satisfaction</div>
+          <div className="text-center group cursor-default">
+            <div className="text-4xl md:text-5xl font-bold text-gradient mb-2 group-hover:scale-110 transition-transform duration-300">100%</div>
+            <div className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">Client Satisfaction</div>
           </div>
         </div>
       </div>
