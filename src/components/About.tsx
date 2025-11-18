@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import profileImage from "@/assets/profile.png";
+import profileCasual from "@/assets/profile-casual.png";
+import profileProfessional from "@/assets/profile-professional.png";
 import { Code2, Palette, Zap, Sparkles } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -18,6 +19,7 @@ const About = () => {
   const imageRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const skillsRef = useRef<HTMLDivElement>(null);
+  const [isFlipped, setIsFlipped] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -85,15 +87,34 @@ const About = () => {
     >
       <div className="container mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left: Profile Image */}
+          {/* Left: Profile Image with Flip Animation */}
           <div ref={imageRef} className="flex justify-center lg:justify-start">
-            <div className="relative group">
-              <div className="absolute -inset-4 accent-gradient rounded-full opacity-20 group-hover:opacity-30 transition-opacity blur-xl" />
-              <img
-                src={profileImage}
-                alt="Rounak - Web Developer"
-                className="relative w-80 h-80 object-cover rounded-full border-4 border-card shadow-xl group-hover:scale-105 transition-transform duration-500"
-              />
+            <div 
+              className="relative group perspective-1000"
+              onMouseEnter={() => setIsFlipped(true)}
+              onMouseLeave={() => setIsFlipped(false)}
+            >
+              <div className="absolute -inset-4 accent-gradient rounded-3xl opacity-20 group-hover:opacity-40 transition-opacity blur-xl" />
+              
+              <div className={`relative w-80 h-96 transition-transform duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
+                {/* Front - Casual Image */}
+                <div className="absolute inset-0 backface-hidden">
+                  <img
+                    src={profileCasual}
+                    alt="Rounak - Casual Look"
+                    className="w-full h-full object-cover rounded-3xl border-4 border-card shadow-2xl"
+                  />
+                </div>
+                
+                {/* Back - Professional Image */}
+                <div className="absolute inset-0 backface-hidden rotate-y-180">
+                  <img
+                    src={profileProfessional}
+                    alt="Rounak - Professional Look"
+                    className="w-full h-full object-cover rounded-3xl border-4 border-card shadow-2xl"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
