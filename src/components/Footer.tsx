@@ -73,6 +73,12 @@ const Footer = () => {
             >
               Contact
             </button>
+            <a
+              href="/auth"
+              className="text-muted-foreground/50 hover:text-primary transition-colors duration-300 font-medium text-sm"
+            >
+              Admin
+            </a>
           </nav>
 
           {/* Copyright */}
