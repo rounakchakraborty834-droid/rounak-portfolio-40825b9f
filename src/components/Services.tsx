@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Rocket, Sparkles, Globe, Shield, Zap, Users } from "lucide-react";
+import { Rocket, Sparkles, Globe, Shield, Zap, Users, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConsultationDialog } from "./ConsultationDialog";
 
@@ -146,32 +146,39 @@ const Services = () => {
             return (
               <div
                 key={index}
-                className="professional-card p-6 rounded-xl group hover:scale-105 transition-all duration-300"
+                className="professional-card p-6 rounded-xl group relative overflow-hidden tilt-card cursor-pointer hover:scale-105 transition-all duration-500"
               >
-                <div className="space-y-4">
-                  {/* Icon with animated gradient */}
-                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${service.gradient} p-4 mb-4 group-hover:shadow-xl transition-all duration-300 group-hover:scale-110`}>
-                    <Icon className="w-full h-full text-white" />
+                {/* Animated gradient background */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
+                
+                {/* Shimmer effect */}
+                <div className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100" />
+                
+                <div className="space-y-4 relative z-10">
+                  {/* Icon with animated gradient and 3D effect */}
+                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${service.gradient} p-4 mb-4 group-hover:shadow-2xl group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500`}>
+                    <Icon className="w-full h-full text-white group-hover:rotate-12 group-hover:scale-110 transition-all duration-500" />
                   </div>
 
-                  {/* Service Title */}
-                  <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
+                  {/* Service Title with gradient on hover */}
+                  <h3 className="text-xl font-bold group-hover:text-gradient transition-all duration-300">
                     {service.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-muted-foreground text-sm leading-relaxed">
+                  <p className="text-muted-foreground text-sm leading-relaxed group-hover:text-foreground transition-colors duration-300">
                     {service.description}
                   </p>
 
-                  {/* Features List */}
+                  {/* Features List with stagger animation */}
                   <ul className="space-y-2 pt-2">
                     {service.features.map((feature, idx) => (
                       <li
                         key={idx}
-                        className="text-xs flex items-center text-foreground/70"
+                        className="text-xs flex items-center text-foreground/70 group-hover:text-foreground transition-colors duration-300"
+                        style={{ transitionDelay: `${idx * 50}ms` }}
                       >
-                        <div className="w-1.5 h-1.5 rounded-full bg-primary mr-2 group-hover:scale-150 transition-transform" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary mr-2 group-hover:scale-150 group-hover:shadow-[0_0_8px_rgba(var(--primary),0.5)] transition-all duration-300" />
                         {feature}
                       </li>
                     ))}

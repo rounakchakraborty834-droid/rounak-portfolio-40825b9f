@@ -63,16 +63,20 @@ const Projects = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Title animation with split text effect
       gsap.fromTo(
         titleRef.current,
         {
           opacity: 0,
-          y: 30,
+          y: 50,
+          scale: 0.9
         },
         {
           opacity: 1,
           y: 0,
-          duration: 0.8,
+          scale: 1,
+          duration: 1,
+          ease: "back.out(1.5)",
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top 70%",
@@ -80,25 +84,52 @@ const Projects = () => {
         }
       );
 
+      // Enhanced card animations with 3D effect
       const cards = projectsRef.current?.children;
       if (cards) {
-        gsap.fromTo(
-          cards,
-          {
-            opacity: 0,
-            y: 50,
-          },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            stagger: 0.1,
-            scrollTrigger: {
-              trigger: projectsRef.current,
-              start: "top 80%",
+        Array.from(cards).forEach((card, index) => {
+          gsap.fromTo(
+            card,
+            {
+              opacity: 0,
+              y: 100,
+              rotationX: -30,
+              scale: 0.8
             },
-          }
-        );
+            {
+              opacity: 1,
+              y: 0,
+              rotationX: 0,
+              scale: 1,
+              duration: 0.8,
+              delay: index * 0.15,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 85%",
+              },
+            }
+          );
+          
+          // Hover animation
+          card.addEventListener('mouseenter', () => {
+            gsap.to(card, {
+              y: -15,
+              scale: 1.05,
+              duration: 0.4,
+              ease: "power2.out"
+            });
+          });
+          
+          card.addEventListener('mouseleave', () => {
+            gsap.to(card, {
+              y: 0,
+              scale: 1,
+              duration: 0.4,
+              ease: "power2.out"
+            });
+          });
+        });
       }
     });
 
@@ -129,51 +160,58 @@ const Projects = () => {
           {projects.map((project) => (
             <div
               key={project.id}
-              className="professional-card p-6 rounded-xl group"
+              className="professional-card p-6 rounded-xl group relative overflow-hidden tilt-card cursor-pointer"
             >
-              <div className="space-y-4">
-                {/* Category Badge */}
+              {/* Animated gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/5 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              {/* Shimmer effect */}
+              <div className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100" />
+              
+              <div className="space-y-4 relative z-10">
+                {/* Category Badge with animation */}
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold px-3 py-1 bg-primary/10 text-primary rounded-full">
+                  <span className="text-xs font-semibold px-3 py-1 bg-primary/10 text-primary rounded-full group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300">
                     {project.category}
                   </span>
-                  <span className="text-3xl font-bold text-muted-foreground/20">
+                  <span className="text-3xl font-bold text-muted-foreground/20 group-hover:text-primary/30 transition-colors">
                     {String(project.id).padStart(2, '0')}
                   </span>
                 </div>
 
-                {/* Project Title */}
-                <h3 className="text-2xl font-bold group-hover:text-primary transition-colors">
+                {/* Project Title with hover effect */}
+                <h3 className="text-2xl font-bold group-hover:text-gradient transition-all duration-300">
                   {project.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-muted-foreground leading-relaxed min-h-[60px]">
+                <p className="text-muted-foreground leading-relaxed min-h-[60px] group-hover:text-foreground transition-colors duration-300">
                   {project.description}
                 </p>
 
-                {/* Tech Stack */}
+                {/* Tech Stack with stagger animation */}
                 <div className="flex flex-wrap gap-2">
                   {project.tech.map((tech, idx) => (
                     <span
                       key={idx}
-                      className="text-xs px-3 py-1 bg-muted rounded-full text-foreground/70"
+                      className="text-xs px-3 py-1 bg-muted rounded-full text-foreground/70 group-hover:bg-primary/10 group-hover:text-primary transition-all duration-300 hover:scale-110"
+                      style={{ transitionDelay: `${idx * 50}ms` }}
                     >
                       {tech}
                     </span>
                   ))}
                 </div>
 
-                {/* Action Buttons */}
+                {/* Action Buttons with enhanced hover */}
                 <div className="flex gap-3 pt-2">
                   {project.link && (
                     <Button
                       variant="default"
                       size="sm"
-                      className="flex-1 accent-gradient hover:opacity-90"
+                      className="flex-1 accent-gradient hover:scale-105 hover:shadow-xl transition-all duration-300 group/btn"
                       onClick={() => window.open(project.link, "_blank")}
                     >
-                      <ExternalLink className="w-4 h-4 mr-2" />
+                      <ExternalLink className="w-4 h-4 mr-2 group-hover/btn:rotate-12 transition-transform" />
                       View Project
                     </Button>
                   )}
