@@ -10,7 +10,6 @@ import Services from "@/components/Services";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ParticleBackground from "@/components/ParticleBackground";
-import CustomCursor from "@/components/CustomCursor";
 import PageTransition from "@/components/PageTransition";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -55,7 +54,6 @@ const Index = () => {
       {!loading && (
         <>
           <ParticleBackground />
-          <CustomCursor />
           <PageTransition isTransitioning={isTransitioning} />
           <main className="relative smooth-scroll">
             <Hero />
