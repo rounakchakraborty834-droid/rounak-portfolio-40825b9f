@@ -95,12 +95,12 @@ const Skills = () => {
     >
       <div className="container mx-auto relative z-10">
         <div ref={titleRef} className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Skills & <span className="text-gradient">Expertise</span>
+          <h2 className="text-4xl md:text-6xl font-bold mb-4">
+            Core <span className="text-gradient">Expertise</span>
           </h2>
           <div className="w-20 h-1 accent-gradient rounded-full mx-auto mb-4" />
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A comprehensive toolkit for building modern, performant, and beautiful web applications
+            Mastering cutting-edge technologies to craft exceptional digital experiences
           </p>
         </div>
 
@@ -113,28 +113,31 @@ const Skills = () => {
             return (
               <div
                 key={index}
-                className="professional-card p-6 rounded-xl group relative overflow-hidden tilt-card cursor-pointer hover:scale-105 transition-all duration-500"
+                className="brutal-card p-8 group hover:scale-105 transition-all duration-500 relative overflow-hidden"
               >
-                {/* Animated background */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
+                {/* Animated gradient background */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
                 
-                <div className="space-y-4 relative z-10">
+                {/* Shimmer effect */}
+                <div className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100" />
+                
+                <div className="space-y-6 relative z-10">
                   {/* Icon with gradient background and animations */}
-                  <div className={`w-14 h-14 rounded-lg bg-gradient-to-br ${category.color} p-3 mb-4 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-2xl transition-all duration-500`}>
+                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${category.color} p-4 group-hover:scale-110 group-hover:rotate-12 group-hover:shadow-neon transition-all duration-500`}>
                     <Icon className="w-full h-full text-white group-hover:scale-110 transition-transform duration-300" />
                   </div>
 
                   {/* Category Title with gradient on hover */}
-                  <h3 className="text-xl font-bold group-hover:text-gradient transition-all duration-300">
+                  <h3 className="text-2xl font-bold group-hover:text-gradient transition-all duration-300">
                     {category.title}
                   </h3>
 
-                  {/* Skills List with stagger animation */}
-                  <div className="flex flex-wrap gap-2">
+                  {/* Skills List with enhanced styling */}
+                  <div className="flex flex-wrap gap-3">
                     {category.skills.map((skill, idx) => (
                       <span
                         key={idx}
-                        className="text-xs px-3 py-1.5 bg-muted rounded-full text-foreground/70 hover:bg-primary/10 hover:text-primary hover:scale-110 transition-all duration-300 cursor-default"
+                        className="text-sm font-medium px-4 py-2 bg-muted/70 rounded-lg text-foreground/70 hover:bg-primary/10 hover:text-primary hover:scale-110 border border-border hover:border-primary/30 transition-all duration-300 cursor-default"
                         style={{ transitionDelay: `${idx * 30}ms` }}
                       >
                         {skill}

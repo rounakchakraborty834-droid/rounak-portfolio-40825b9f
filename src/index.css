@@ -8,51 +8,51 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Ultra-Premium Gen Z Color Palette */
-    --background: 220 15% 8%;
-    --foreground: 0 0% 98%;
+    /* Premium Elegant Color Palette */
+    --background: 215 25% 10%;
+    --foreground: 210 20% 98%;
 
-    --card: 220 15% 12%;
-    --card-foreground: 0 0% 98%;
+    --card: 215 20% 15%;
+    --card-foreground: 210 20% 98%;
 
-    --popover: 220 15% 10%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 215 25% 12%;
+    --popover-foreground: 210 20% 98%;
 
-    /* Electric Pop Accent - Cyber Lime */
-    --primary: 85 100% 50%;
-    --primary-foreground: 220 15% 8%;
+    /* Elegant Gold Accent */
+    --primary: 38 90% 67%;
+    --primary-foreground: 215 25% 10%;
 
-    --secondary: 220 10% 18%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 215 15% 20%;
+    --secondary-foreground: 210 20% 98%;
 
-    --muted: 220 10% 15%;
-    --muted-foreground: 220 5% 60%;
+    --muted: 215 15% 18%;
+    --muted-foreground: 215 10% 65%;
 
-    /* Secondary accent - Digital Lavender */
-    --accent: 270 70% 65%;
-    --accent-foreground: 220 15% 8%;
+    /* Cool Cyan Accent */
+    --accent: 187 85% 53%;
+    --accent-foreground: 215 25% 10%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 10% 20%;
-    --input: 220 10% 15%;
-    --ring: 85 100% 50%;
+    --border: 215 15% 25%;
+    --input: 215 15% 18%;
+    --ring: 38 90% 67%;
 
     --radius: 1rem;
     
-    /* Gen Z Premium Design Tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(85, 100%, 50%), hsl(270, 70%, 65%));
-    --gradient-hero: linear-gradient(135deg, hsl(220, 15%, 8%) 0%, hsl(220, 15%, 12%) 50%, hsl(220, 15%, 8%) 100%);
-    --gradient-glass: linear-gradient(135deg, hsl(220, 15%, 18% / 0.4), hsl(220, 15%, 12% / 0.2));
+    /* Premium Elegant Design Tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(38, 90%, 67%), hsl(187, 85%, 53%));
+    --gradient-hero: linear-gradient(135deg, hsl(215, 25%, 10%) 0%, hsl(215, 20%, 15%) 50%, hsl(215, 25%, 10%) 100%);
+    --gradient-glass: linear-gradient(135deg, hsl(215, 20%, 20% / 0.4), hsl(215, 20%, 15% / 0.2));
     
-    /* Premium shadows with neon glow */
+    /* Premium shadows with golden glow */
     --shadow-sm: 0 2px 8px 0 rgb(0 0 0 / 0.4);
     --shadow-md: 0 8px 16px -4px rgb(0 0 0 / 0.5);
     --shadow-lg: 0 16px 32px -8px rgb(0 0 0 / 0.6);
     --shadow-xl: 0 24px 48px -12px rgb(0 0 0 / 0.7);
-    --shadow-neon: 0 0 40px hsl(85 100% 50% / 0.5), 0 0 80px hsl(85 100% 50% / 0.2);
-    --shadow-neon-accent: 0 0 40px hsl(270 70% 65% / 0.5), 0 0 80px hsl(270 70% 65% / 0.2);
+    --shadow-neon: 0 0 40px hsl(38 90% 67% / 0.4), 0 0 80px hsl(38 90% 67% / 0.15);
+    --shadow-neon-accent: 0 0 40px hsl(187 85% 53% / 0.4), 0 0 80px hsl(187 85% 53% / 0.15);
     
     /* Fluid animations */
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -83,6 +83,11 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground overflow-x-hidden;
     font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    cursor: url('/src/assets/cursor.png') 12 12, auto;
+  }
+  
+  a, button, [role="button"], .cursor-pointer {
+    cursor: url('/src/assets/cursor.png') 12 12, pointer;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -118,6 +123,19 @@ All colors MUST be HSL.
     box-shadow: var(--shadow-xl), var(--shadow-neon);
     transform: translateY(-8px) scale(1.02);
     border-color: hsl(var(--primary) / 0.6);
+  }
+  
+  /* Professional card with elegant design */
+  .professional-card {
+    background: hsl(var(--card));
+    border: 2px solid hsl(var(--border));
+    box-shadow: var(--shadow-lg);
+    transition: var(--transition-smooth);
+  }
+  
+  .professional-card:hover {
+    border-color: hsl(var(--primary) / 0.5);
+    box-shadow: var(--shadow-xl), var(--shadow-neon);
   }
   
   /* Neo-brutalist card */
