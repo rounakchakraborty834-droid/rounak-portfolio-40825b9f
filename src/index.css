@@ -83,11 +83,11 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground overflow-x-hidden;
     font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    cursor: url('/src/assets/cursor.png') 12 12, auto;
+    cursor: url('/src/assets/cursor-new.png') 12 12, auto;
   }
   
   a, button, [role="button"], .cursor-pointer {
-    cursor: url('/src/assets/cursor.png') 12 12, pointer;
+    cursor: url('/src/assets/cursor-new.png') 12 12, pointer;
   }
   
   h1, h2, h3, h4, h5, h6 {
