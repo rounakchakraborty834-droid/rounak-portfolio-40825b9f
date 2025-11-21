@@ -2,43 +2,18 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Github, Linkedin, Mail, Send } from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-
-const contactSchema = z.object({
-  name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name must be less than 100 characters"),
-  email: z.string().trim().email("Invalid email address").max(255, "Email must be less than 255 characters"),
-  message: z.string().trim().min(10, "Message must be at least 10 characters").max(2000, "Message must be less than 2000 characters")
-});
-
-type ContactFormData = z.infer<typeof contactSchema>;
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
-  
-  const form = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      message: ""
-    }
-  });
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        formRef.current?.querySelectorAll(".form-field") || [],
+        sectionRef.current?.querySelectorAll(".animate-item") || [],
         {
           opacity: 0,
           y: 30,
@@ -59,32 +34,6 @@ const Contact = () => {
     return () => ctx.revert();
   }, []);
 
-  const onSubmit = async (data: ContactFormData) => {
-    try {
-      const { error } = await supabase
-        .from('contact_messages')
-        .insert([{
-          name: data.name,
-          email: data.email,
-          message: data.message
-        }]);
-
-      if (error) throw error;
-
-      toast.success("Message sent successfully! I'll get back to you soon.");
-      form.reset();
-      
-      // Animate form
-      gsap.fromTo(formRef.current, 
-        { scale: 1 },
-        { scale: 0.95, duration: 0.1, yoyo: true, repeat: 1 }
-      );
-    } catch (error) {
-      console.error('Error sending message:', error);
-      toast.error("Failed to send message. Please try again.");
-    }
-  };
-
   return (
     <section
       ref={sectionRef}
@@ -94,17 +43,17 @@ const Contact = () => {
       <div className="container mx-auto max-w-4xl relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Get In <span className="text-gradient">Touch</span>
+            Download <span className="text-gradient">CV</span>
           </h2>
           <div className="w-20 h-1 accent-gradient rounded-full mx-auto mb-4" />
           <p className="text-lg text-muted-foreground">
-            Have a project in mind? Let's discuss how we can work together.
+            Get a comprehensive overview of my skills, experience, and projects.
           </p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Contact Info */}
-          <div className="space-y-6">
+          <div className="space-y-6 animate-item">
             <div className="professional-card p-6 rounded-xl">
               <div className="flex items-center gap-4 mb-4">
                 <div className="p-3 accent-gradient rounded-lg">
@@ -146,81 +95,43 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div className="lg:col-span-2">
-            <Form {...form}>
-              <form
-                ref={formRef}
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="professional-card p-8 rounded-xl space-y-6"
+          {/* Download CV Section */}
+          <div className="lg:col-span-2 animate-item">
+            <div className="professional-card p-12 rounded-xl text-center space-y-8">
+              <div className="space-y-4">
+                <div className="w-20 h-20 mx-auto accent-gradient rounded-2xl flex items-center justify-center animate-pulse-slow">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                  </svg>
+                </div>
+                
+                <h3 className="text-3xl font-bold">My Resume</h3>
+                <p className="text-muted-foreground text-lg max-w-md mx-auto">
+                  Download my complete resume to learn more about my professional journey, technical skills, and project highlights.
+                </p>
+              </div>
+
+              <Button
+                size="lg"
+                className="accent-gradient hover:scale-105 hover:shadow-neon transition-all duration-300 text-white font-bold text-lg px-12 py-6"
+                onClick={() => {
+                  const link = document.createElement('a');
+                  link.href = '/Resume.pdf';
+                  link.download = 'Rounak_Resume.pdf';
+                  link.click();
+                  toast.success("Resume downloaded successfully!");
+                }}
               >
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem className="form-field">
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20"
-                          placeholder="John Doe"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Download Resume
+              </Button>
 
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem className="form-field">
-                      <FormLabel>Email Address</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          type="email"
-                          className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20"
-                          placeholder="john@example.com"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="message"
-                  render={({ field }) => (
-                    <FormItem className="form-field">
-                      <FormLabel>Message</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          {...field}
-                          rows={5}
-                          className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none"
-                          placeholder="Tell me about your project..."
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <Button
-                  type="submit"
-                  size="lg"
-                  disabled={form.formState.isSubmitting}
-                  className="w-full accent-gradient hover:opacity-90 text-white shadow-lg"
-                >
-                  <Send className="w-4 h-4 mr-2" />
-                  {form.formState.isSubmitting ? "Sending..." : "Send Message"}
-                </Button>
-              </form>
-            </Form>
+              <p className="text-sm text-muted-foreground">
+                PDF Format • Updated November 2024 • 2 Pages
+              </p>
+            </div>
           </div>
         </div>
       </div>

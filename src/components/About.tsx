@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import profileCartoon from "@/assets/profile-cartoon.png";
 import profileProfessional from "@/assets/profile-professional.png";
+import profileCartoon from "@/assets/profile-cartoon.png";
 import { Code2, Palette, Zap, Sparkles } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -97,21 +97,21 @@ const About = () => {
               <div className="absolute -inset-4 accent-gradient rounded-3xl opacity-20 group-hover:opacity-40 transition-opacity blur-xl" />
               
               <div className={`relative w-80 h-96 transition-transform duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
-                {/* Front - Cartoon Image */}
+                {/* Front - Professional Image */}
                 <div className="absolute inset-0 backface-hidden">
                   <img
-                    src={profileCartoon}
-                    alt="Rounak - Cartoon Style"
+                    src={profileProfessional}
+                    alt="Rounak - Professional"
                     className="w-full h-full object-cover rounded-3xl border-4 border-primary/20 shadow-2xl"
                   />
                 </div>
                 
-                {/* Back - Professional Image */}
+                {/* Back - Cartoon Image */}
                 <div className="absolute inset-0 backface-hidden rotate-y-180">
                   <img
-                    src={profileProfessional}
-                    alt="Rounak - Professional Look"
-                    className="w-full h-full object-cover rounded-3xl border-4 border-card shadow-2xl"
+                    src={profileCartoon}
+                    alt="Rounak - Cartoon Style"
+                    className="w-full h-full object-cover rounded-3xl border-4 border-primary/20 shadow-2xl"
                   />
                 </div>
               </div>
