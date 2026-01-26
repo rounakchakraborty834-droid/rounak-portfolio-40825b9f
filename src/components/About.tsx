@@ -1,26 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import profileMain from "@/assets/profile.png";
 import profileProfessional from "@/assets/profile-professional.png";
-import profileCartoon from "@/assets/profile-cartoon.png";
 import { Code2, Palette, Zap, Sparkles } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const skills = [
-  { name: "HTML5 & CSS3", icon: Code2, color: "text-orange-600" },
-  { name: "JavaScript & TypeScript", icon: Zap, color: "text-yellow-600" },
-  { name: "React & Next.js", icon: Sparkles, color: "text-blue-600" },
-  { name: "UI/UX Design", icon: Palette, color: "text-purple-600" },
+  { name: "HTML5 & CSS3", icon: Code2, color: "text-primary" },
+  { name: "JavaScript & TypeScript", icon: Zap, color: "text-accent" },
+  { name: "React & Next.js", icon: Sparkles, color: "text-primary" },
+  { name: "UI/UX Design", icon: Palette, color: "text-accent" },
 ];
 
 const About = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const skillsRef = useRef<HTMLDivElement>(null);
   const [isFlipped, setIsFlipped] = useState(false);
-
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -74,6 +74,14 @@ const About = () => {
           },
         }
       );
+
+      // Auto-rotating 360 animation
+      gsap.to(imageContainerRef.current, {
+        rotateY: 360,
+        duration: 8,
+        repeat: -1,
+        ease: "none",
+      });
     });
 
     return () => ctx.revert();
@@ -87,33 +95,71 @@ const About = () => {
     >
       <div className="container mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left: Profile Image with Flip Animation */}
+          {/* Left: Profile Image with Auto-Rotating 360° Animation */}
           <div ref={imageRef} className="flex justify-center lg:justify-start">
             <div 
-              className="relative group perspective-1000"
+              className="relative group"
+              style={{ perspective: "1000px" }}
               onMouseEnter={() => setIsFlipped(true)}
               onMouseLeave={() => setIsFlipped(false)}
             >
-              <div className="absolute -inset-4 accent-gradient rounded-3xl opacity-20 group-hover:opacity-40 transition-opacity blur-xl" />
+              {/* Glowing ring effect */}
+              <div className="absolute -inset-6 rounded-full bg-gradient-to-r from-primary via-accent to-primary opacity-30 blur-2xl animate-pulse" />
+              <div className="absolute -inset-3 rounded-full bg-gradient-to-r from-primary to-accent opacity-20 blur-xl" />
               
-              <div className={`relative w-80 h-96 transition-transform duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
-                {/* Front - Professional Image */}
-                <div className="absolute inset-0 backface-hidden">
+              <div 
+                ref={imageContainerRef}
+                className="relative w-72 h-72 md:w-80 md:h-80"
+                style={{ 
+                  transformStyle: "preserve-3d",
+                  transition: isFlipped ? "transform 0.7s ease-in-out" : "none",
+                  transform: isFlipped ? "rotateY(180deg)" : undefined
+                }}
+              >
+                {/* Front - Main Profile Image */}
+                <div 
+                  className="absolute inset-0 rounded-full overflow-hidden border-4 border-primary/40 shadow-2xl"
+                  style={{ backfaceVisibility: "hidden" }}
+                >
+                  <img
+                    src={profileMain}
+                    alt="Rounak - Profile"
+                    className="w-full h-full object-cover object-top"
+                    loading="eager"
+                  />
+                  {/* Overlay glow */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-accent/10" />
+                </div>
+                
+                {/* Back - Professional Image */}
+                <div 
+                  className="absolute inset-0 rounded-full overflow-hidden border-4 border-accent/40 shadow-2xl"
+                  style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+                >
                   <img
                     src={profileProfessional}
                     alt="Rounak - Professional"
-                    className="w-full h-full object-cover rounded-3xl border-4 border-primary/20 shadow-2xl"
+                    className="w-full h-full object-cover"
+                    loading="lazy"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-accent/20 via-transparent to-primary/10" />
                 </div>
-                
-                {/* Back - Cartoon Image */}
-                <div className="absolute inset-0 backface-hidden rotate-y-180">
-                  <img
-                    src={profileCartoon}
-                    alt="Rounak - Cartoon Style"
-                    className="w-full h-full object-cover rounded-3xl border-4 border-primary/20 shadow-2xl"
+              </div>
+              
+              {/* Floating particles around image */}
+              <div className="absolute -inset-8 pointer-events-none">
+                {[...Array(6)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute w-2 h-2 bg-primary rounded-full animate-pulse"
+                    style={{
+                      top: `${15 + Math.sin(i * 60 * Math.PI / 180) * 45}%`,
+                      left: `${50 + Math.cos(i * 60 * Math.PI / 180) * 50}%`,
+                      animationDelay: `${i * 0.3}s`,
+                      opacity: 0.6
+                    }}
                   />
-                </div>
+                ))}
               </div>
             </div>
           </div>
