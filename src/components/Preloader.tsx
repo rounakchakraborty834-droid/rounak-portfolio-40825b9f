@@ -25,7 +25,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
 
     tl.to(progressBarRef.current, {
       width: "100%",
-      duration: 2.5,
+      duration: 1.2,
       ease: "power2.out",
       onUpdate: function() {
         const progress = Math.round(this.progress() * 100);
