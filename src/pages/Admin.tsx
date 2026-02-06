@@ -7,7 +7,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Session } from "@supabase/supabase-js";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, Mail, Calendar, DollarSign, Clock } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { LogOut, Mail, Calendar, DollarSign, Clock, Trash2, MessageSquare, Users, Activity } from "lucide-react";
 
 interface ContactMessage {
   id: string;
@@ -39,30 +50,25 @@ const Admin = () => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
-      if (!session) {
-        navigate("/auth");
-      }
+      if (!session) navigate("/auth");
     });
 
-    // Check for existing session and verify admin role
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       setSession(session);
-      
+
       if (!session) {
         navigate("/auth");
         return;
       }
 
-      // Check if user has admin role
       const { data: roleData, error } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', session.user.id)
-        .eq('role', 'admin')
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session.user.id)
+        .eq("role", "admin")
         .single();
 
       if (error || !roleData) {
@@ -78,15 +84,42 @@ const Admin = () => {
     };
 
     checkAuth();
-
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  // Real-time subscriptions
+  useEffect(() => {
+    if (!isAdmin) return;
+
+    const messagesChannel = supabase
+      .channel("contact_messages_changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "contact_messages" },
+        () => fetchData()
+      )
+      .subscribe();
+
+    const consultationsChannel = supabase
+      .channel("consultations_changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "consultations" },
+        () => fetchData()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(messagesChannel);
+      supabase.removeChannel(consultationsChannel);
+    };
+  }, [isAdmin]);
 
   const fetchData = async () => {
     try {
       const [messagesResult, consultationsResult] = await Promise.all([
-        supabase.from('contact_messages').select('*').order('created_at', { ascending: false }),
-        supabase.from('consultations').select('*').order('created_at', { ascending: false })
+        supabase.from("contact_messages").select("*").order("created_at", { ascending: false }),
+        supabase.from("consultations").select("*").order("created_at", { ascending: false }),
       ]);
 
       if (messagesResult.error) throw messagesResult.error;
@@ -99,27 +132,53 @@ const Admin = () => {
     }
   };
 
+  const deleteMessage = async (id: string) => {
+    const { error } = await supabase.from("contact_messages").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete message");
+    } else {
+      toast.success("Message deleted");
+      setContactMessages((prev) => prev.filter((m) => m.id !== id));
+    }
+  };
+
+  const deleteConsultation = async (id: string) => {
+    const { error } = await supabase.from("consultations").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete consultation");
+    } else {
+      toast.success("Consultation deleted");
+      setConsultations((prev) => prev.filter((c) => c.id !== id));
+    }
+  };
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     toast.success("Signed out successfully");
     navigate("/");
   };
 
+  const latestDate = [...contactMessages, ...consultations]
+    .map((item) => new Date(item.created_at))
+    .sort((a, b) => b.getTime() - a.getTime())[0];
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Loading...</p>
+        <div className="text-center space-y-4">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-muted-foreground">Loading dashboard...</p>
+        </div>
       </div>
     );
   }
 
-  if (!session || !isAdmin) {
-    return null;
-  }
+  if (!session || !isAdmin) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/30 p-6">
       <div className="container mx-auto max-w-7xl">
+        {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-4xl font-bold">Admin Dashboard</h1>
@@ -131,14 +190,61 @@ const Admin = () => {
           </Button>
         </div>
 
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <Card>
+            <CardContent className="pt-6 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl accent-gradient flex items-center justify-center">
+                <MessageSquare className="w-6 h-6 text-primary-foreground" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{contactMessages.length}</p>
+                <p className="text-sm text-muted-foreground">Messages</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center">
+                <Users className="w-6 h-6 text-accent" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{consultations.length}</p>
+                <p className="text-sm text-muted-foreground">Consultations</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
+                <Activity className="w-6 h-6 text-green-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{contactMessages.length + consultations.length}</p>
+                <p className="text-sm text-muted-foreground">Total Entries</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                <Calendar className="w-6 h-6 text-purple-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">
+                  {latestDate ? latestDate.toLocaleDateString() : "N/A"}
+                </p>
+                <p className="text-sm text-muted-foreground">Latest Entry</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Tabs */}
         <Tabs defaultValue="messages" className="space-y-6">
           <TabsList className="grid w-full max-w-md grid-cols-2">
-            <TabsTrigger value="messages">
-              Contact Messages ({contactMessages.length})
-            </TabsTrigger>
-            <TabsTrigger value="consultations">
-              Consultations ({consultations.length})
-            </TabsTrigger>
+            <TabsTrigger value="messages">Messages ({contactMessages.length})</TabsTrigger>
+            <TabsTrigger value="consultations">Consultations ({consultations.length})</TabsTrigger>
           </TabsList>
 
           <TabsContent value="messages" className="space-y-4">
@@ -160,9 +266,32 @@ const Admin = () => {
                           {message.email}
                         </CardDescription>
                       </div>
-                      <Badge variant="secondary">
-                        {new Date(message.created_at).toLocaleDateString()}
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="secondary">
+                          {new Date(message.created_at).toLocaleDateString()}
+                        </Badge>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete message?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This will permanently delete this contact message from {message.name}.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => deleteMessage(message.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                Delete
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent>
@@ -198,14 +327,37 @@ const Admin = () => {
                           </div>
                         </CardDescription>
                       </div>
-                      <div className="text-right space-y-2">
-                        <Badge variant="secondary">
-                          {new Date(consultation.created_at).toLocaleDateString()}
-                        </Badge>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Calendar className="w-4 h-4" />
-                          {new Date(consultation.consultation_date).toLocaleDateString()}
+                      <div className="flex items-center gap-2">
+                        <div className="text-right space-y-2">
+                          <Badge variant="secondary">
+                            {new Date(consultation.created_at).toLocaleDateString()}
+                          </Badge>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Calendar className="w-4 h-4" />
+                            {new Date(consultation.consultation_date).toLocaleDateString()}
+                          </div>
                         </div>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete consultation?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This will permanently delete the consultation request from {consultation.name}.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => deleteConsultation(consultation.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                Delete
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </div>
                     </div>
                   </CardHeader>
@@ -221,15 +373,13 @@ const Admin = () => {
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground mb-1 flex items-center gap-1">
-                          <DollarSign className="w-3 h-3" />
-                          Budget
+                          <DollarSign className="w-3 h-3" /> Budget
                         </p>
                         <Badge variant="outline">{consultation.budget}</Badge>
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground mb-1 flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          Delivery Time
+                          <Clock className="w-3 h-3" /> Delivery Time
                         </p>
                         <Badge variant="outline">{consultation.delivery_time}</Badge>
                       </div>

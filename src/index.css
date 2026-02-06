@@ -372,4 +372,29 @@ All colors MUST be HSL.
   .tilt-card:hover {
     transform: perspective(1000px) rotateX(2deg) rotateY(2deg) scale(1.02);
   }
+
+  /* Typewriter cursor blink */
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .animate-blink {
+    animation: blink 1s step-end infinite;
+  }
+
+  /* Float animation for particles */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Glow text */
+  .glow-text {
+    text-shadow: 0 0 20px hsl(38 90% 67% / 0.3), 0 0 40px hsl(38 90% 67% / 0.15);
+  }
+
+  /* Neon shadow utility */
+  .shadow-neon {
+    box-shadow: var(--shadow-neon);
+  }
 }
